@@ -1,24 +1,23 @@
 version: '3'
 services:
   app:
-    build: .
+    build:
+      context: .  
+      dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - "3000:3000"
+    environment:
+      MONGODB_URI: ${MONGODB_URI}  
+      JWT_SECRET: ${JWT_SECRET}  
     depends_on:
       - db
-    env_file:
-      - .env
-    volumes:
-      - ./public/uploads:/app/public/uploads  
+
   db:
-    image: mongo
+    image: mongo:latest
+    ports:
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db
-    networks:
-      - backend
+      - mongodb-data:/data/db
 
 volumes:
-  mongo-data:
-
-networks:
-  backend:
+  mongodb-data:
