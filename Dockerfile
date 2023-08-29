@@ -22,6 +22,6 @@ ENV JWT_SECRET=${JWT_SECRET}
 
 USER root
 
-CMD ["ts-node", "index.ts"]
+CMD ["ts-node", "src/index.ts"]
 
 EXPOSE 3000
