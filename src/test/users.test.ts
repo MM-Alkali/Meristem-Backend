@@ -1,10 +1,10 @@
 // import { Request, Response } from 'express';
 // import request from 'supertest';
-// import { app } from '../../src'; 
+// import { app } from '../../src';
 // import * as notifications from '../utils/notifications';
 // import * as utilities from '../utils/utilities';
 // import { User } from '../models/users';
-// import bcrypt from 'bcryptjs'; 
+// import bcrypt from 'bcryptjs';
 // import supertest from 'supertest';
 
 // jest.mock('../utils/notifications');
@@ -102,7 +102,6 @@
 //     })
 // })
 
-
 //  test('should make a successful POST request to /auth/register', async () => {
 //      const response = await supertest(app).post('/auth/register').send({
 //          email: 'test@example.com',
@@ -115,7 +114,7 @@
 //      expect(response.status).toBe(200)
 //      expect(response.body).toEqual({
 //          message: 'Name must be 3 or more character',
-        
+
 //      })
 //  })
 
@@ -123,4 +122,3 @@
 // function register(req: Request, res: Response) {
 //   throw new Error('Function not implemented.');
 // }
-
