@@ -7,6 +7,7 @@ import {
   declineRequest,
   fetchRequestbyID,
   fetchAllRequests,
+  exportRequests,
   addComment,
   editComment,
 } from '../controllers/requests';
@@ -27,6 +28,8 @@ router.get('/search', isUser, searchRequest);
 router.get('/fetch/:id', isUser, fetchRequestbyID);
 
 router.get('/fetch-all', isUser, fetchAllRequests);
+
+router.get('/export-requests', isUser, exportRequests);
 
 router.post('/add-comment/:id', isUser, addComment);
 

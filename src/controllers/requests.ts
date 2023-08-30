@@ -7,6 +7,7 @@ import {
 } from '../models/requests';
 import { requestValidator } from '../utils/utilities';
 import { User } from '../models/users';
+import { stringify } from 'csv-stringify';
 import { handleRequestUpdates } from '../utils/requestHelpers';
 
 // Create or Update a request
@@ -399,5 +400,74 @@ export const editComment = async (req: Request | any, res: Response) => {
   } catch (error) {
     console.error('Error editing comment:', error);
     return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const exportRequests = async (req: Request, res: Response) => {
+  try {
+    const { fromDate, toDate } = req.query;
+
+    if (!fromDate || !toDate) {
+      return res
+        .status(400)
+        .json({ error: 'Both fromDate and toDate are required.' });
+    }
+
+    const startDate = new Date(`${fromDate}T00:00:00Z`);
+    const endDate = new Date(`${toDate}T23:59:59Z`);
+
+    const requestsWithinDateRange = await Requests.find({
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    });
+
+    if (requestsWithinDateRange.length === 0) {
+      return res.status(404).json({
+        message: 'No requests found within the specified date range.',
+      });
+    }
+    const csvData = [];
+    csvData.push([
+      'Request ID',
+      'Client Name',
+      'Client Email',
+      'Type',
+      'Status',
+    ]);
+
+    requestsWithinDateRange.forEach((request) => {
+      csvData.push([
+        request._id.toString(),
+        request.clientName,
+        request.clientEmail,
+        request.type,
+        request.status,
+      ]);
+    });
+
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename="exported_requests.csv"',
+    );
+    res.setHeader('Content-Type', 'text/csv');
+
+    const columns = [
+      'Request ID',
+      'Client Name',
+      'Client Email',
+      'Type',
+      'Status',
+    ];
+
+    const csvStream = stringify(csvData, {
+      header: true,
+      columns: columns,
+    });
+    csvStream.pipe(res);
+  } catch (error) {
+    console.error('Error exporting requests:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
